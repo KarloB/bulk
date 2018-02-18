@@ -36,10 +36,7 @@ func TestBulkInsertMySQL(t *testing.T) {
 
 	ctx := context.Background()
 
-	b, err := New(MySQLDB, conn)
-	if err != nil {
-		t.Fatal(err)
-	}
+	b := New(MySQLDB, conn)
 
 	numOfInserts := 150000
 	rows := make([]interface{}, numOfInserts)
@@ -88,10 +85,7 @@ func TestBulkInsertOracle(t *testing.T) {
 	var conn *sql.DB
 
 	ctx := context.Background()
-	b, err := New(OracleDB, conn)
-	if err != nil {
-		t.Fatal(err)
-	}
+	b := New(OracleDB, conn)
 
 	numOfInserts := 2002
 	rows := make([]interface{}, numOfInserts)
@@ -130,14 +124,8 @@ func TestMiscBadData(t *testing.T) {
 	var conn *sql.DB
 
 	ctx := context.Background()
-	dbMySQL, err := New(MySQLDB, conn)
-	if err != nil {
-		t.Fatal(err)
-	}
-	dbOracle, err := New(OracleDB, conn)
-	if err != nil {
-		t.Fatal(err)
-	}
+	dbMySQL := New(MySQLDB, conn)
+	dbOracle := New(OracleDB, conn)
 
 	numOfInserts := 5
 	rows := make([]interface{}, numOfInserts)
@@ -145,48 +133,39 @@ func TestMiscBadData(t *testing.T) {
 		rows[i] = TestService{Description: fmt.Sprintf("Desc %d ", i), Tag: fmt.Sprintf("Tag %d", i)}
 	}
 
-	err = dbOracle.BulkInsert(ctx, insertServiceFull, rows)
-	fmt.Println(err)
+	err := dbOracle.BulkInsert(ctx, insertServiceFull, rows)
 	if err == nil {
 		t.Error("expected error")
 	}
 	err = dbMySQL.BulkInsert(ctx, insertServiceFull, rows)
-	fmt.Println(err)
 	if err == nil {
 		t.Error("expected error")
 	}
 	err = dbOracle.BulkInsert(ctx, emptyQuery, rows)
-	fmt.Println(err)
 	if err == nil {
 		t.Error("expected error")
 	}
 	err = dbMySQL.BulkInsert(ctx, emptyQuery, rows)
-	fmt.Println(err)
 	if err == nil {
 		t.Error("expected error")
 	}
 	err = dbMySQL.BulkInsert(ctx, invalidQuery, rows)
-	fmt.Println(err)
 	if err == nil {
 		t.Error("expected error")
 	}
 	err = dbMySQL.BulkInsert(ctx, invalidQuery2, rows)
-	fmt.Println(err)
 	if err == nil {
 		t.Error("expected error")
 	}
 	err = dbMySQL.BulkInsert(ctx, invalidQuery3, rows)
-	fmt.Println(err)
 	if err == nil {
 		t.Error("expected error")
 	}
 	err = dbMySQL.BulkInsert(ctx, invalidQuery4, rows)
-	fmt.Println(err)
 	if err == nil {
 		t.Error("expected error")
 	}
 	err = dbMySQL.BulkInsert(ctx, invalidQuery5, rows)
-	fmt.Println(err)
 	if err == nil {
 		t.Error("expected error")
 	}

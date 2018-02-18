@@ -33,13 +33,12 @@ const oracleMaxPlaceholders = 1000
 
 // New init bulk insert
 // define database type (MySQL or Oracle) and provide database connection to init bulk insert
-func New(dbType DatabaseType, conn *sql.DB) (*Bulk, error) {
+func New(dbType DatabaseType, conn *sql.DB) *Bulk {
 	t := &Bulk{
 		conn:   conn,
 		dbType: dbType,
 	}
-
-	return t, nil
+	return t
 }
 
 // queryArgs query + args pairs
